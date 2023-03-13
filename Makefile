@@ -54,21 +54,24 @@ PACKAGES_IT = $(shell go list ./... | grep -v 'vendor\|pkg/client/generated' | g
 # By default the organization name is `openebs`. 
 
 ifeq (${IMAGE_ORG}, )
-  IMAGE_ORG = openebs
+  IMAGE_ORG = cloudx2021
 endif
 
 # If IMAGE_TAG is mentioned then TAG will be set to IMAGE_TAG
 # If RELEASE_TAG is mentioned then TAG will be set to RELEAE_TAG
 # If both are mentioned then TAG will be set to RELEASE_TAG
-TAG=ci
+TAG=3.0.0
+RELEASE_TAG=3.0.0
+IMAGE_TAG=3.0.0
+COMPONENT=provisioner-localpv
 
-ifneq (${IMAGE_TAG}, )
-  TAG=${IMAGE_TAG:v%=%}
-endif
+# ifneq (${IMAGE_TAG}, )
+#   TAG=${IMAGE_TAG:v%=%}
+# endif
 
-ifneq (${RELEASE_TAG}, )
-  TAG=${RELEASE_TAG:v%=%}
-endif
+# ifneq (${RELEASE_TAG}, )
+#   TAG=${RELEASE_TAG:v%=%}
+# endif
 
 # Specify the name for the binaries
 PROVISIONER_LOCALPV=provisioner-localpv
@@ -77,22 +80,22 @@ PROVISIONER_LOCALPV=provisioner-localpv
 PROVISIONER_LOCALPV_IMAGE?=provisioner-localpv
 
 # Final variable with image org, name and tag
-PROVISIONER_LOCALPV_IMAGE_TAG=${IMAGE_ORG}/${PROVISIONER_LOCALPV_IMAGE}:${TAG}
+PROVISIONER_LOCALPV_IMAGE_TAG=${IMAGE_ORG}/${PROVISIONER_LOCALPV_IMAGE}:${RELEASE_TAG}
 
 # Specify the date of build
 DBUILD_DATE=$(shell date -u +'%Y-%m-%dT%H:%M:%SZ')
 
 # Specify the docker arg for repository url
 ifeq (${DBUILD_REPO_URL}, )
-  DBUILD_REPO_URL="https://github.com/openebs/dynamic-localpv-provisioner"
+  DBUILD_REPO_URL="https://github.com/EdgeCloudX/dynamic-localpv-provisioner"
   export DBUILD_REPO_URL
 endif
 
 # Specify the docker arg for website url
-ifeq (${DBUILD_SITE_URL}, )
-  DBUILD_SITE_URL="https://openebs.io"
-  export DBUILD_SITE_URL
-endif
+# ifeq (${DBUILD_SITE_URL}, )
+#   DBUILD_SITE_URL="https://openebs.io"
+#   export DBUILD_SITE_URL
+# endif
 
 # Specify the kubeconfig path to a Kubernetes cluster 
 # to run Hostpath integration tests
@@ -101,7 +104,8 @@ ifeq (${KUBECONFIG}, )
   export KUBECONFIG
 endif
 
-export DBUILD_ARGS=--build-arg DBUILD_DATE=${DBUILD_DATE} --build-arg DBUILD_REPO_URL=${DBUILD_REPO_URL} --build-arg DBUILD_SITE_URL=${DBUILD_SITE_URL} --build-arg BRANCH=${BRANCH} --build-arg RELEASE_TAG=${RELEASE_TAG}
+# export DBUILD_ARGS=--build-arg DBUILD_DATE=${DBUILD_DATE} --build-arg DBUILD_REPO_URL=${DBUILD_REPO_URL} --build-arg DBUILD_SITE_URL=${DBUILD_SITE_URL} --build-arg BRANCH=${BRANCH} --build-arg RELEASE_TAG=${RELEASE_TAG}
+export DBUILD_ARGS=--build-arg DBUILD_DATE=${DBUILD_DATE} --build-arg DBUILD_REPO_URL=${DBUILD_REPO_URL} --build-arg DBUILD_SITE_URL=${DBUILD_SITE_URL} --build-arg RELEASE_TAG=${RELEASE_TAG}
 
 .PHONY: all
 all: test provisioner-localpv-image

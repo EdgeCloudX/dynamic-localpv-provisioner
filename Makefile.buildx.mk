@@ -36,9 +36,9 @@ docker.buildx:
 		docker buildx create --platform ${PLATFORMS} --name container-builder --use;\
 	fi
 	@docker buildx build --platform ${PLATFORMS} \
-		-t "$(DOCKERX_IMAGE_NAME)" ${DBUILD_ARGS} -f $(PWD)/buildscripts/$(COMPONENT)/$(COMPONENT).Dockerfile \
+		-t "$(PROVISIONER_LOCALPV_IMAGE_TAG)" -f $(PWD)/buildscripts/$(COMPONENT)/$(COMPONENT).Dockerfile \
 		. ${PUSH_ARG}
-	@echo "--> Build docker image: $(DOCKERX_IMAGE_NAME)"
+	@echo "--> Build docker image: $(PROVISIONER_LOCALPV_IMAGE_TAG)"
 	@echo
 
 .PHONY: docker.buildx.provisioner-localpv
